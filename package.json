@@ -1,0 +1,13 @@
+{
+	"name": "byte-website",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler pages deploy public",
+		"dev": "wrangler pages dev public",
+		"start": "wrangler pages dev public"
+	},
+	"devDependencies": {
+		"wrangler": "^4.52.1"
+	}
+}
