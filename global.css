@@ -1,0 +1,17 @@
+body {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 0 10px;
+    font-size: 18px;
+    line-height: 1.4;
+    font-family: dejavu-serif, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #EEEEEE;
+    background-color: #111111;
+}
+
+h1, h2, h3 {
+    line-height: 1.4;
+}
+
