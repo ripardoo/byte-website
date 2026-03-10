@@ -1,0 +1,33 @@
+# Byte
+
+> Byte is a curated program that brings exceptional young builders from Finland to Silicon Valley for eight days of focused, high-quality conversations with world-class founders and operators building the future with technology.
+
+Byte selects eight highly driven, ambitious individuals under 25 who are Finnish citizens or permanent residents. Participants are chosen for their technical ability, drive, and ambition — not prior experience. The format is intentionally small so every meeting is personal and high-signal for both sides.
+
+The focus is not on visiting big-tech or popular attractions. Instead, participants get individual and group conversations with top technology founders and interesting people building the future. Participation is free aside from personal expenses and visa costs.
+
+Byte is currently in its second cohort (Byte 2), taking place in March 2026. It is sponsored by Teknologiateollisuuden 100-vuotissäätiö.
+
+Contact: guidebyte@gmail.com
+
+## Pages
+
+- [Home](https://joinbyte.so/index.html): Main landing page with program overview, application info, and FAQ
+- [Application form](https://joinbyte.so/form/index.html): Byte 2 application form (deadline: January 16th)
+- [Byte 2 cohort & blurbs](https://joinbyte.so/byte2/blurbs/index.html): Profiles of the eight selected Byte 2 participants and the organizers
+
+## Participants (Byte 2)
+
+- Noel, 18yo: AI research startup engineer; built an open-source Rust web server library (10K+ users); Team Finland in robotics
+- Veikka, 21yo: Serial entrepreneur; defense startup SPECTROFI founder; former Second Lieutenant in Finland's elite CQB unit
+- Lassi, 17yo: Freelance IT since age 12; won a Supercell-sponsored hackathon solo; security infrastructure on 5K+ servers
+- Touko, 20yo: Cofounder of minttu.ai (energy finance AI); YC interviewed at 19; International Science Olympiad representative
+- Otto, 21yo: CUAV drone developer at Sensofusion ($700M+ valuation); BSc in Technical Physics & Math in 2 years
+- Topi, 20yo: International Chemistry Olympiad bronze medallist; custom video game controller business
+- Oona, 24yo: FR8 team member (world's first hacker hotel); space physics researcher at Aalto University
+- Elias, 21yo: ML engineer at Hamina Wireless; IOI 2022; Nordic Olympiad gold medallist; incoming Databricks intern
+
+## Organizers
+
+- Roope: Led Finland's biggest startup community; founding FFF Venture, a student angel syndicate
+- Niklas: Built one of Finland's largest vintage fashion ecommerce brands; now at Meru Health (YC S18) in the Bay Area
