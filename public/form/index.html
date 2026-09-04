@@ -1,16 +1,455 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Byte 2 application</title>
-    <script async src="https://tally.so/widgets/embed.js"></script>
-    <style type="text/css">
-      html { margin: 0; height: 100%; overflow: hidden; }
-      iframe { position: absolute; top: 0; right: 0; bottom: 0; left: 0; border: 0; }
-    </style>
-  </head>
-  <body>
-    <iframe data-tally-src="https://tally.so/r/A7zP1D" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" title="Byte 2 application"></iframe>
-  </body>
-</html>
+    <title>Byte – Apply</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --bg: #0a0a0a;
+    --fg: #eee;
+    --muted: #9a9a9a;
+    --faint: #6a6a6a;
+    --rule: #2e2e2e;
+    --rule-soft: #1c1c1c;
+    --focus: #fff;
+    --max: 640px;
+    --pad: 24px;
+}
 
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+a { color: var(--fg); text-decoration: underline; text-underline-offset: 2px; }
+a:hover { color: #fff; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+.btn {
+    display: inline-block;
+    background: var(--fg);
+    color: var(--bg);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 0;
+    border-radius: 6px;
+    padding: 14px 48px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+.btn:hover { background: #e0e0e0; color: var(--bg); transform: translateY(-1px); }
+.btn-ghost {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--rule);
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.05); border-color: #4a4a4a; transform: none; }
+
+/* Progress bar */
+.progress {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    padding: 18px 0 14px; border-bottom: 1px solid var(--rule-soft);
+}
+.progress .bar { height: 2px; background: var(--rule-soft); overflow: hidden; }
+.progress .bar i { display: block; height: 100%; background: var(--fg); width: 0; transition: width .25s ease; }
+.progress .meta {
+    display: flex; justify-content: space-between; gap: 16px;
+    font-size: 12px; color: var(--muted); margin-top: 10px;
+}
+
+/* Form fields */
+fieldset { border: 0; }
+legend {
+    font-size: clamp(22px, 4vw, 28px); font-weight: 600; letter-spacing: -0.024em;
+    line-height: 1.2; margin-bottom: 8px;
+}
+.step-note { color: var(--muted); font-size: 15px; margin-bottom: 32px; max-width: 58ch; }
+
+.field { margin-bottom: 30px; }
+.field > label, .field > .label {
+    display: block; font-size: 16px; font-weight: 500; letter-spacing: -0.012em; margin-bottom: 4px;
+}
+.hint { display: block; font-size: 13.5px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+.optional { color: var(--faint); font-weight: 400; }
+
+input[type=text], input[type=email], input[type=tel], input[type=url], input[type=date],
+textarea, select {
+    width: 100%; background: transparent; color: var(--fg);
+    font-family: inherit; font-size: 16.5px; line-height: 1.55;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 12px 14px;
+    transition: border-color .15s ease;
+}
+input:hover, textarea:hover, select:hover { border-color: #4a4a4a; }
+input:focus, textarea:focus, select:focus { border-color: var(--fg); outline: none; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+textarea { min-height: 132px; resize: vertical; }
+select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+        linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 20px) calc(50% + 1px), calc(100% - 15px) calc(50% + 1px);
+    background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 44px;
+}
+select option { background: #111; color: #fff; }
+::placeholder { color: #5a5a5a; }
+
+.counter { font-size: 12px; color: var(--faint); text-align: right; margin-top: 6px; }
+
+.choices { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.choice {
+    display: flex; align-items: flex-start; gap: 12px; cursor: pointer;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 13px 15px;
+    transition: border-color .15s ease;
+}
+.choice:hover { border-color: #4a4a4a; }
+.choice input {
+    appearance: none; width: 17px; height: 17px; flex: 0 0 auto; margin-top: 3px;
+    border: 1px solid #5a5a5a; border-radius: 50%; position: relative; background: transparent;
+}
+.choice input[type=checkbox] { border-radius: 2px; }
+.choice input:checked { border-color: var(--fg); }
+.choice input:checked:after {
+    content: ''; position: absolute; inset: 3px; background: var(--fg); border-radius: 50%;
+}
+.choice input[type=checkbox]:checked:after { border-radius: 1px; inset: 2px; }
+.choice:has(input:checked) { border-color: var(--fg); }
+.choice span { font-size: 16px; line-height: 1.45; }
+
+.consent { align-items: flex-start; }
+.consent span { font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+
+.error { color: #ff8b8b; font-size: 13.5px; margin-top: 7px; display: none; }
+.field.invalid .error { display: block; }
+.field.invalid input, .field.invalid textarea,
+.field.invalid select, .field.invalid .choice { border-color: #ff8b8b; }
+
+.hp { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; overflow: hidden; }
+
+.nav {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    margin-top: 44px; padding-top: 26px; border-top: 1px solid var(--rule-soft);
+}
+.saved { font-size: 12.5px; color: var(--faint); }
+
+.done { padding: 120px 0; text-align: left; }
+.done h1 { font-size: clamp(26px, 5vw, 36px); font-weight: 600; letter-spacing: -0.028em; margin-bottom: 18px; }
+.done .muted { color: var(--muted); }
+.btn-row { margin-top: 32px; }
+
+.commit-list {
+    list-style: none; border: 1px solid var(--rule); border-radius: 2px;
+    padding: 20px 22px; margin-bottom: 30px;
+}
+.commit-list li {
+    display: flex; justify-content: space-between; gap: 20px;
+    padding: 9px 0; border-bottom: 1px solid var(--rule-soft); font-size: 15.5px;
+}
+.commit-list li:last-child { border-bottom: 0; }
+.commit-list .w { color: var(--muted); }
+
+.hide { display: none !important; }
+
+@media (max-width: 560px) {
+    body { font-size: 15px; }
+    .commit-list li { flex-direction: column; gap: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
+}
+    </style>
+</head>
+<body>
+
+<div class="progress" id="progress">
+    <div class="wrap">
+        <div class="bar"><i id="bar"></i></div>
+        <div class="meta">
+            <span><a href="/" style="text-decoration:none">Byte</a></span>
+            <span id="stepLabel">Step 1 of 8</span>
+        </div>
+    </div>
+</div>
+
+<main class="wrap" style="padding-top:44px;padding-bottom:80px">
+
+<form id="form" novalidate autocomplete="on">
+
+    <div class="hp" aria-hidden="true">
+        <label>Do not fill this in <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <!-- 1 -->
+    <fieldset class="step" data-step="1">
+        <legend>Basics</legend>
+        <p class="step-note">This takes about 10–15 minutes. Your answers are saved in this browser as you go.</p>
+
+        <div class="field">
+            <label for="full_name">Full name</label>
+            <input id="full_name" name="full_name" type="text" required minlength="2" maxlength="80" autocomplete="name">
+            <span class="error">Please give your full name.</span>
+        </div>
+
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email" inputmode="email">
+            <span class="error">Please give an email address we can reach you at.</span>
+        </div>
+
+        <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="+358…">
+            <span class="error">Please give a phone number.</span>
+        </div>
+
+        <div class="field">
+            <label for="date_of_birth">Date of birth</label>
+            <span class="hint">Applications are weighed relative to your age.</span>
+            <input id="date_of_birth" name="date_of_birth" type="date" required min="1990-01-01" max="2014-12-31">
+            <span class="error">Please give your date of birth.</span>
+        </div>
+
+        <div class="field">
+            <label for="location">Where are you based?</label>
+            <span class="hint">City is enough — we use this to book your flights from the right airport.</span>
+            <input id="location" name="location" type="text" required maxlength="80">
+            <span class="error">Please tell us where you are based.</span>
+        </div>
+
+        <div class="field">
+            <span class="label">Are you a Finnish citizen or a permanent resident of Finland?</span>
+            <div class="choices" data-name="eligibility_fi">
+                <label class="choice"><input type="radio" name="eligibility_fi" value="yes" required><span>Yes</span></label>
+                <label class="choice"><input type="radio" name="eligibility_fi" value="no"><span>No</span></label>
+            </div>
+            <span class="error">Please pick one.</span>
+        </div>
+    </fieldset>
+
+    <!-- 2 -->
+    <fieldset class="step hide" data-step="2">
+        <legend>Thinking</legend>
+        <p class="step-note">There are no right answers here. We read these more carefully than anything else on the form — write like you'd talk.</p>
+
+        <div class="field">
+            <label for="problems">What problems are you interested in solving?</label>
+            <textarea id="problems" name="problems" required data-soft="1500"></textarea>
+            <div class="counter"></div>
+            <span class="error">Please answer this one.</span>
+        </div>
+
+        <div class="field">
+            <label for="future">What is the future you can see that others are not convinced on?</label>
+            <textarea id="future" name="future" required data-soft="1500"></textarea>
+            <div class="counter"></div>
+            <span class="error">Please answer this one.</span>
+        </div>
+
+        <div class="field">
+            <label for="blocker">What is the biggest blocker in solving that problem, or achieving that future?</label>
+            <textarea id="blocker" name="blocker" required data-soft="1500"></textarea>
+            <div class="counter"></div>
+            <span class="error">Please answer this one.</span>
+        </div>
+    </fieldset>
+
+    <!-- 3 -->
+    <fieldset class="step hide" data-step="3">
+        <legend>Work</legend>
+        <p class="step-note">A complex product and a prototype thrown together in a weekend are equally interesting.</p>
+
+        <div class="field">
+            <label for="main_link">Main link</label>
+            <span class="hint">The one thing you'd most want us to look at. A repo, a demo, a paper, a company, a video — anything. If you don't have one, say so here.</span>
+            <input id="main_link" name="main_link" type="text" required maxlength="300" placeholder="https://">
+            <span class="error">Give us a link, or tell us you don't have one yet.</span>
+        </div>
+
+        <div class="field">
+            <label for="main_link_why">Why that one?</label>
+            <textarea id="main_link_why" name="main_link_why" required data-soft="500" style="min-height:100px"></textarea>
+            <div class="counter"></div>
+            <span class="error">Please answer this one.</span>
+        </div>
+
+        <div class="field">
+            <label for="other_links">Anything else you want to show us? <span class="optional">optional</span></label>
+            <span class="hint">Own site, GitHub, demos, writing — one per line.</span>
+            <textarea id="other_links" name="other_links" style="min-height:100px"></textarea>
+        </div>
+    </fieldset>
+
+    <!-- 4 -->
+    <fieldset class="step hide" data-step="4">
+        <legend>This week</legend>
+        <p class="step-note">We start contacting people the day selections are made, so this is the most useful thing you can give us.</p>
+
+        <div class="field">
+            <label for="who_to_meet">Name 2–3 people, companies or research groups in the Bay Area you'd want to meet — and why each one.</label>
+            <span class="hint">Be specific. "Someone working on X" is fine if you don't have a name.</span>
+            <textarea id="who_to_meet" name="who_to_meet" required data-soft="1200"></textarea>
+            <div class="counter"></div>
+            <span class="error">Please answer this one.</span>
+        </div>
+
+        <div class="field">
+            <label for="success">What would make this week a success for you?</label>
+            <textarea id="success" name="success" required data-soft="800" style="min-height:110px"></textarea>
+            <div class="counter"></div>
+            <span class="error">Please answer this one.</span>
+        </div>
+    </fieldset>
+
+    <!-- 5 -->
+    <fieldset class="step hide" data-step="5">
+        <legend>Commitment</legend>
+        <p class="step-note">The fellowship includes three evening sessions in Helsinki before the trip. They are part of the fellowship, not extras.</p>
+
+        <ul class="commit-list">
+            <li><span>Kick-off</span><span class="w">Thu 8 Oct, 18–20</span></li>
+            <li><span>Pre-byte 1</span><span class="w">Mon 12 Oct, 18–20</span></li>
+            <li><span>Pre-byte 2</span><span class="w">Mon 19 Oct, 18–20</span></li>
+            <li><span>Fellowship week in the Bay Area</span><span class="w">26 Oct – 1 Nov</span></li>
+        </ul>
+
+        <div class="field">
+            <span class="label">Can you commit to all of the above?</span>
+            <div class="choices" data-name="commitment">
+                <label class="choice"><input type="radio" name="commitment" value="yes" required><span>Yes</span></label>
+                <label class="choice"><input type="radio" name="commitment" value="yes_with_exception"><span>Yes, with one exception</span></label>
+                <label class="choice"><input type="radio" name="commitment" value="no"><span>No</span></label>
+            </div>
+            <span class="error">Please pick one.</span>
+        </div>
+
+        <div class="field hide" id="commit_detail_field" data-showif="commitment=yes_with_exception">
+            <label for="commitment_detail">Which one, and what's the conflict?</label>
+            <input id="commitment_detail" name="commitment_detail" type="text" maxlength="300">
+            <span class="error">Please tell us which one.</span>
+        </div>
+    </fieldset>
+
+    <!-- 6 -->
+    <fieldset class="step hide" data-step="6">
+        <legend>Practicalities</legend>
+        <p class="step-note">There are four weeks between the decision and the flight. A "no" or "not sure" here does not hurt your application — we just need to know early.</p>
+
+        <div class="field">
+            <span class="label">Is your passport valid until at least May 2027?</span>
+            <div class="choices" data-name="passport_valid">
+                <label class="choice"><input type="radio" name="passport_valid" value="yes" required><span>Yes</span></label>
+                <label class="choice"><input type="radio" name="passport_valid" value="no"><span>No</span></label>
+                <label class="choice"><input type="radio" name="passport_valid" value="unsure"><span>Not sure</span></label>
+            </div>
+            <span class="error">Please pick one.</span>
+        </div>
+
+        <div class="field">
+            <span class="label">Are you eligible for a US ESTA, or do you already hold a valid US visa?</span>
+            <div class="choices" data-name="us_entry">
+                <label class="choice"><input type="radio" name="us_entry" value="yes" required><span>Yes</span></label>
+                <label class="choice"><input type="radio" name="us_entry" value="no"><span>No</span></label>
+                <label class="choice"><input type="radio" name="us_entry" value="unsure"><span>Not sure — we can help</span></label>
+            </div>
+            <span class="error">Please pick one.</span>
+        </div>
+    </fieldset>
+
+    <!-- 7 -->
+    <fieldset class="step hide" data-step="7">
+        <legend>Last bits</legend>
+        <p class="step-note">This tells us where to spend our effort next year.</p>
+
+        <div class="field">
+            <label for="source">Where did you hear about us?</label>
+            <select id="source" name="source" required>
+                <option value="">Choose one…</option>
+                <option value="student_org">A student organisation (Aaltoes, AaltoAI, Wave, a guild…)</option>
+                <option value="school">My school or a teacher</option>
+                <option value="competition">A science or maths competition network (MAOL, Datatähti, an olympiad, Scifest…)</option>
+                <option value="robotics">A robotics community (FIRST Global, VEX, FLL…)</option>
+                <option value="byte_alum">Someone who has been on Byte before</option>
+                <option value="byte_team">Someone from the Byte team contacted me</option>
+                <option value="friend">A friend</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="social">Instagram or TikTok</option>
+                <option value="other">Somewhere else</option>
+            </select>
+            <span class="error">Please pick one.</span>
+        </div>
+
+        <div class="field hide" id="source_detail_field" data-showif="source=school,competition,robotics,student_org,other">
+            <label for="source_detail">Which one?</label>
+            <input id="source_detail" name="source_detail" type="text" maxlength="120">
+            <span class="error">Please tell us which one.</span>
+        </div>
+
+        <div class="field">
+            <label for="referral">Who is the smartest person you know that should be on this fellowship? <span class="optional">optional</span></label>
+            <span class="hint">A name and a link if you have one. This is how we found several of last year's fellows.</span>
+            <textarea id="referral" name="referral" style="min-height:100px"></textarea>
+        </div>
+    </fieldset>
+
+    <!-- 8 -->
+    <fieldset class="step hide" data-step="8">
+        <legend>Before you send</legend>
+        <p class="step-note">One consent question, and one that is genuinely optional.</p>
+
+        <div class="field">
+            <div class="choices">
+                <label class="choice consent">
+                    <input type="checkbox" name="gdpr_consent" value="yes" required>
+                    <span>I understand that Byte stores the information in this form to evaluate my application. It is read by the Byte organising team only, and deleted 12 months after the application deadline unless I agree below to be contacted about future rounds. I can ask for it to be deleted sooner at any time by emailing guidebyte@gmail.com.</span>
+                </label>
+            </div>
+            <span class="error">We need this to be able to read your application.</span>
+        </div>
+
+        <div class="field">
+            <span class="label">May we contact you about future Byte rounds?</span>
+            <div class="choices" data-name="future_contact">
+                <label class="choice"><input type="radio" name="future_contact" value="yes" required><span>Yes</span></label>
+                <label class="choice"><input type="radio" name="future_contact" value="no"><span>No</span></label>
+            </div>
+            <span class="error">Please pick one.</span>
+        </div>
+
+        <p class="faint" id="submitError" style="color:#ff8b8b;display:none"></p>
+    </fieldset>
+
+    <div class="nav">
+        <button type="button" class="btn btn-ghost hide" id="back">Back</button>
+        <span class="saved" id="saved"></span>
+        <button type="button" class="btn" id="next">Continue</button>
+        <button type="submit" class="btn hide" id="submit">Send application</button>
+    </div>
+</form>
+
+<div class="done hide" id="done">
+    <h1>Thanks — that's it.</h1>
+    <p>We read every application. You'll hear from us by Monday 28 September either way.</p>
+    <p class="muted">We've sent a confirmation to your email. If it doesn't arrive in a few minutes, check your spam folder, then email <a href="mailto:guidebyte@gmail.com">guidebyte@gmail.com</a>.</p>
+    <div class="btn-row"><a class="btn btn-ghost" href="/">Back to Byte</a></div>
+</div>
+
+</main>
+
+<script src="/assets/config.js"></script>
+<script src="/assets/form.js"></script>
+</body>
+</html>
