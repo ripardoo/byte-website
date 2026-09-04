@@ -1,23 +1,218 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    max-width: 650px;
-    margin: 40px auto;
-    padding: 0 10px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
-    line-height: 1.4;
-    font-weight: 400;
-    font-family: dejavu-sans-mono, dejavu-serif, sans-serif;
-    font-style: normal;
-    color: #EEEEEE;
-    background-color: #111111;
+    line-height: 1.6;
+    color: #eee;
+    background-color: #0a0a0a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-    color: #56daff;
+    color: #eee;
     text-decoration: underline;
+    text-underline-offset: 2px;
 }
 
-h1, h2, h3 {
-    line-height: 1.2;
-    font-family: dejavu-serif, sans-serif;
+a:hover {
+    color: #fff;
 }
 
+.site {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Hero */
+.hero {
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: clamp(4rem, 12vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.15em;
+}
+
+.hero-title .letter {
+    display: inline-block;
+    min-width: 0.6em;
+    text-align: center;
+    transition: opacity 0.15s;
+}
+
+.hero-tagline {
+    font-size: 1rem;
+    color: #888;
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.01em;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 48px;
+    background: #fff;
+    color: #0a0a0a;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.01em;
+}
+
+.btn:hover {
+    background: #e0e0e0;
+    color: #0a0a0a;
+    transform: translateY(-1px);
+}
+
+.hero-deadline {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #555;
+    letter-spacing: 0.02em;
+}
+
+/* Description */
+.description {
+    padding: 4rem 0 3rem;
+    text-align: center;
+    color: #999;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+/* Divider */
+.divider {
+    border: none;
+    border-top: 1px solid #222;
+    margin: 0;
+}
+
+/* FAQ */
+.faq {
+    padding: 3rem 0;
+}
+
+.faq-heading {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.faq-item {
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.faq-item:first-of-type {
+    border-top: 1px solid #1a1a1a;
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #eee;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    padding: 1.1rem 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    line-height: 1.4;
+}
+
+.faq-question:hover {
+    color: #fff;
+}
+
+.faq-icon {
+    flex-shrink: 0;
+    font-size: 1.2rem;
+    color: #555;
+    transition: transform 0.2s;
+    width: 1.2em;
+    text-align: center;
+}
+
+.faq-item.open .faq-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.faq-answer-inner {
+    padding: 0 0 1.2rem;
+    color: #888;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* Bottom CTA */
+.bottom-cta {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+/* Footer */
+.footer {
+    padding: 3rem 0 4rem;
+    text-align: center;
+    color: #444;
+    font-size: 0.85rem;
+    line-height: 1.7;
+}
+
+.footer a {
+    color: #555;
+}
+
+.footer a:hover {
+    color: #888;
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 3.5rem;
+    }
+
+    .btn {
+        padding: 12px 36px;
+    }
+
+    .site {
+        padding: 0 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-title .letter {
+        transition: none;
+    }
+}
