@@ -378,22 +378,20 @@ select option { background: #111; color: #fff; }
             <label for="source">Where did you hear about us?</label>
             <select id="source" name="source" required>
                 <option value="">Choose one…</option>
-                <option value="student_org">A student organisation (Aaltoes, AaltoAI, Wave, a guild…)</option>
-                <option value="school">My school or a teacher</option>
-                <option value="competition">A science or maths competition network (MAOL, Datatähti, an olympiad, Scifest…)</option>
-                <option value="robotics">A robotics community (FIRST Global, VEX, FLL…)</option>
-                <option value="byte_alum">Someone who has been on Byte before</option>
-                <option value="byte_team">Someone from the Byte team contacted me</option>
                 <option value="friend">A friend</option>
-                <option value="linkedin">LinkedIn</option>
-                <option value="social">Instagram or TikTok</option>
-                <option value="other">Somewhere else</option>
+                <option value="byte_alum">A previous Byte fellow</option>
+                <option value="byte_team">The Byte team</option>
+                <option value="student_org">A student organisation</option>
+                <option value="school">School or a teacher</option>
+                <option value="competition">A competition or community</option>
+                <option value="social">Social media</option>
+                <option value="other">Other</option>
             </select>
             <span class="error">Please pick one.</span>
         </div>
 
-        <div class="field hide" id="source_detail_field" data-showif="source=school,competition,robotics,student_org,other">
-            <label for="source_detail">Which one?</label>
+        <div class="field hide" id="source_detail_field" data-showif="source=student_org,school,competition,social,other">
+            <label for="source_detail">Tell us more</label>
             <input id="source_detail" name="source_detail" type="text" maxlength="120">
             <span class="error">Please tell us which one.</span>
         </div>
