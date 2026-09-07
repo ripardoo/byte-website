@@ -6,19 +6,11 @@
   var form  = document.getElementById("form");
   if (!form) return;
 
-  var steps = Array.prototype.slice.call(form.querySelectorAll(".step"));
-  var total = steps.length;
-  var cur   = 0;
-
-  var elBack   = document.getElementById("back");
-  var elNext   = document.getElementById("next");
   var elSubmit = document.getElementById("submit");
-  var elBar    = document.getElementById("bar");
-  var elLabel  = document.getElementById("stepLabel");
   var elSaved  = document.getElementById("saved");
   var elDone   = document.getElementById("done");
   var elErr    = document.getElementById("submitError");
-  var elProg   = document.getElementById("progress");
+  var elTopbar = document.getElementById("topbar");
 
   var KEY = "byte_application_v1";
 
@@ -29,7 +21,7 @@
     var data = {};
     collect(data, true);
     try {
-      s.setItem(KEY, JSON.stringify({ step: cur, data: data, at: Date.now() }));
+      s.setItem(KEY, JSON.stringify({ data: data, at: Date.now() }));
       elSaved.textContent = "Saved";
       clearTimeout(save._t);
       save._t = setTimeout(function(){ elSaved.textContent = ""; }, 1800);
@@ -57,7 +49,6 @@
         nodes[0].value = val;
       }
     });
-    if (typeof saved.step === "number" && saved.step < total) cur = saved.step;
   }
 
   function clearSaved(){ var s = store(); if (s) { try { s.removeItem(KEY); } catch(e){} } }
@@ -131,60 +122,27 @@
     return ok;
   }
 
-  function validateStep(i) {
-    var node = steps[i];
+  function validateAll() {
     var ok = true;
+    var firstBad = null;
     var checkedGroups = {};
-    node.querySelectorAll("input,textarea,select").forEach(function (el) {
+    form.querySelectorAll("input,textarea,select").forEach(function (el) {
       if (!el.name || el.name === "website") return;
       if (el.type === "radio") {
         if (checkedGroups[el.name]) return;
         checkedGroups[el.name] = 1;
       }
-      if (!validateField(el)) ok = false;
-    });
-    if (!ok) {
-      var bad = node.querySelector(".field.invalid");
-      if (bad) {
-        var y = bad.getBoundingClientRect().top + window.pageYOffset - (elProg.offsetHeight + 24);
-        window.scrollTo({ top: y, behavior: "smooth" });
+      if (!validateField(el)) {
+        ok = false;
+        if (!firstBad) firstBad = fieldOf(el);
       }
+    });
+    if (firstBad) {
+      var y = firstBad.getBoundingClientRect().top + window.pageYOffset - (elTopbar.offsetHeight + 24);
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
     return ok;
   }
-
-  function render() {
-    steps.forEach(function (s, i) { s.classList.toggle("hide", i !== cur); });
-    var last = cur === total - 1;
-    elBack.classList.toggle("hide", cur === 0);
-    elNext.classList.toggle("hide", last);
-    elSubmit.classList.toggle("hide", !last);
-    elBar.style.width = Math.round(((cur + (last ? 1 : 0)) / total) * 100) + "%";
-    elLabel.textContent = "Step " + (cur + 1) + " of " + total;
-    syncConditionals();
-    var h = steps[cur].querySelector("legend");
-    if (h) h.setAttribute("tabindex", "-1");
-  }
-
-  function go(n, skipValidation) {
-    if (n > cur && !skipValidation && !validateStep(cur)) return;
-    cur = Math.max(0, Math.min(total - 1, n));
-    save();
-    render();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    var lg = steps[cur].querySelector("legend");
-    if (lg) setTimeout(function(){ try { lg.focus({preventScroll:true}); } catch(e){} }, 60);
-  }
-
-  elNext.addEventListener("click", function () { go(cur + 1); });
-  elBack.addEventListener("click", function () { go(cur - 1, true); });
-
-  form.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && e.target.tagName !== "TEXTAREA" && e.target.type !== "submit") {
-      e.preventDefault();
-      if (cur < total - 1) go(cur + 1);
-    }
-  });
 
   form.querySelectorAll("textarea[data-soft]").forEach(function (ta) {
     var soft = parseInt(ta.getAttribute("data-soft"), 10);
@@ -219,9 +177,7 @@
     e.preventDefault();
     elErr.style.display = "none";
 
-    for (var i = 0; i < total; i++) {
-      if (!validateStep(i)) { go(i, true); return; }
-    }
+    if (!validateAll()) return;
 
     if (form.elements.website && form.elements.website.value) return;
 
@@ -251,8 +207,7 @@
         if (!okFlag) throw new Error(res.t || "bad response");
         clearSaved();
         form.classList.add("hide");
-        document.querySelector(".nav").classList.add("hide");
-        elProg.classList.add("hide");
+        elTopbar.classList.add("hide");
         elDone.classList.remove("hide");
         window.scrollTo({ top: 0 });
       })
@@ -273,8 +228,7 @@
     var end = new Date(CFG.DEADLINE + "T23:59:59+03:00");
     if (isNaN(end.getTime()) || Date.now() <= end.getTime()) return;
     form.classList.add("hide");
-    document.querySelector(".nav").classList.add("hide");
-    elProg.classList.add("hide");
+    elTopbar.classList.add("hide");
     elDone.classList.remove("hide");
     elDone.querySelector("h1").textContent = "Applications are closed.";
     elDone.querySelectorAll("p").forEach(function (p, i) { if (i) p.remove(); });
@@ -284,5 +238,5 @@
   })();
 
   restore();
-  render();
+  syncConditionals();
 })();
