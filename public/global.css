@@ -4,24 +4,56 @@
     box-sizing: border-box;
 }
 
+:root {
+    --bg: #0a0a0a;
+    --fg: #eee;
+    --muted: #888;
+    --faint: #555;
+    --border: #1a1a1a;
+    --divider: #222;
+    --btn-bg: #fff;
+    --btn-fg: #0a0a0a;
+    --btn-hover: #e0e0e0;
+    --link: #eee;
+    --link-hover: #fff;
+    --toggle-bg: #333;
+    --toggle-border: #444;
+}
+
+html[data-theme="light"] {
+    --bg: #f5f3ef;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --faint: #999;
+    --border: #ddd;
+    --divider: #ccc;
+    --btn-bg: #1a1a1a;
+    --btn-fg: #fff;
+    --btn-hover: #333;
+    --link: #1a1a1a;
+    --link-hover: #000;
+    --toggle-bg: #ccc;
+    --toggle-border: #aaa;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    color: #eee;
-    background-color: #0a0a0a;
+    color: var(--fg);
+    background-color: var(--bg);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-    color: #eee;
+    color: var(--link);
     text-decoration: underline;
     text-underline-offset: 2px;
 }
 
 a:hover {
-    color: #fff;
+    color: var(--link-hover);
 }
 
 .site {
@@ -30,46 +62,87 @@ a:hover {
     padding: 0 24px;
 }
 
-/* Hero */
-.hero {
-    min-height: 85vh;
+/* Header */
+.header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0 2.5rem;
+}
+
+.header-logo {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--fg);
+    text-decoration: none;
+}
+
+.header-logo:hover {
+    color: var(--fg);
+}
+
+/* Theme toggle */
+.theme-toggle {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: var(--toggle-bg);
+    border: 1px solid var(--toggle-border);
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    padding: 0;
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+}
+
+.theme-toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--fg);
+    transition: left 0.2s;
+    display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-}
-
-.hero-title {
-    font-size: clamp(4rem, 12vw, 7rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
+    font-size: 10px;
     line-height: 1;
-    margin-bottom: 0.15em;
+    pointer-events: none;
 }
 
-.hero-title .letter {
-    display: inline-block;
-    min-width: 0.6em;
-    text-align: center;
-    transition: opacity 0.15s;
+html[data-theme="light"] .theme-toggle-knob {
+    left: 22px;
 }
 
-.hero-tagline {
-    font-size: 1rem;
-    color: #888;
-    font-weight: 400;
-    margin-bottom: 2.5rem;
-    letter-spacing: 0.01em;
+/* Content */
+.content {
+    padding-bottom: 2rem;
 }
 
+.content p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--fg);
+    margin-bottom: 1.2rem;
+}
+
+/* Button */
 .btn {
     display: inline-block;
-    padding: 14px 48px;
-    background: #fff;
-    color: #0a0a0a;
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 12px 40px;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    font-size: 0.95rem;
+    font-weight: 500;
     text-decoration: none;
     border-radius: 6px;
     transition: background 0.15s, transform 0.1s;
@@ -77,31 +150,26 @@ a:hover {
 }
 
 .btn:hover {
-    background: #e0e0e0;
-    color: #0a0a0a;
+    background: var(--btn-hover);
+    color: var(--btn-fg);
     transform: translateY(-1px);
 }
 
-.hero-deadline {
-    margin-top: 1rem;
-    font-size: 0.8rem;
-    color: #555;
-    letter-spacing: 0.02em;
+.apply-section {
+    margin-bottom: 2.5rem;
 }
 
-/* Description */
-.description {
-    padding: 4rem 0 3rem;
-    text-align: center;
-    color: #999;
-    font-size: 1rem;
-    line-height: 1.7;
+.deadline {
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+    color: var(--faint);
+    letter-spacing: 0.02em;
 }
 
 /* Divider */
 .divider {
     border: none;
-    border-top: 1px solid #222;
+    border-top: 1px solid var(--divider);
     margin: 0;
 }
 
@@ -111,31 +179,30 @@ a:hover {
 }
 
 .faq-heading {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #555;
-    margin-bottom: 2rem;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--fg);
 }
 
 .faq-item {
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid var(--border);
 }
 
 .faq-item:first-of-type {
-    border-top: 1px solid #1a1a1a;
+    border-top: 1px solid var(--border);
 }
 
 .faq-question {
     width: 100%;
     background: none;
     border: none;
-    color: #eee;
+    color: var(--fg);
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 500;
     text-align: left;
-    padding: 1.1rem 0;
+    padding: 1rem 0;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -145,13 +212,13 @@ a:hover {
 }
 
 .faq-question:hover {
-    color: #fff;
+    color: var(--link-hover);
 }
 
 .faq-icon {
     flex-shrink: 0;
     font-size: 1.2rem;
-    color: #555;
+    color: var(--faint);
     transition: transform 0.2s;
     width: 1.2em;
     text-align: center;
@@ -169,50 +236,44 @@ a:hover {
 
 .faq-answer-inner {
     padding: 0 0 1.2rem;
-    color: #888;
-    font-size: 0.95rem;
+    color: var(--muted);
+    font-size: 0.9rem;
     line-height: 1.7;
+}
+
+.faq-answer-inner a {
+    color: var(--muted);
 }
 
 /* Bottom CTA */
 .bottom-cta {
-    padding: 3rem 0;
+    padding: 2rem 0 3rem;
     text-align: center;
 }
 
 /* Footer */
 .footer {
-    padding: 3rem 0 4rem;
+    padding: 2rem 0 4rem;
     text-align: center;
-    color: #444;
+    color: var(--faint);
     font-size: 0.85rem;
     line-height: 1.7;
 }
 
 .footer a {
-    color: #555;
+    color: var(--muted);
 }
 
 .footer a:hover {
-    color: #888;
+    color: var(--link-hover);
 }
 
 @media (max-width: 480px) {
-    .hero-title {
-        font-size: 3.5rem;
-    }
-
     .btn {
         padding: 12px 36px;
     }
 
     .site {
         padding: 0 20px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hero-title .letter {
-        transition: none;
     }
 }
