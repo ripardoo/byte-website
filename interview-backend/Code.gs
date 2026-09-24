@@ -1,5 +1,5 @@
 /**
- * Byte 3 interview booking backend (Google Apps Script, bound to a Google Sheet).
+ * Byte 3 interview booking backend (standalone Google Apps Script, owned by robihanss@gmail.com).
  *
  * Sheet tabs (created by setup()):
  *   Availability  – one row per free window, Finnish time: Date | From | To
@@ -21,6 +21,9 @@ var CONFIG = {
   ONE_BOOKING_PER_EMAIL: true
 };
 
+// "Byte 3 interviews" sheet in robihanss@gmail.com's Drive
+var SHEET_ID = "1pfqvHbwsu1VV0rppALKCN9xaH3qMVKANDa-o7aMfpEk";
+
 var AVAIL = "Availability";
 var BOOK = "Bookings";
 var BOOK_COLS = ["booked_at", "slot_start", "slot_label", "name", "email", "event_id", "meet_link", "status"];
@@ -28,8 +31,7 @@ var BOOK_COLS = ["booked_at", "slot_start", "slot_label", "name", "email", "even
 /* ---------- one-time setup: run this once from the editor ---------- */
 
 function setup() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  PropertiesService.getScriptProperties().setProperty("SHEET_ID", ss.getId());
+  var ss = SpreadsheetApp.openById(SHEET_ID);
 
   var a = ss.getSheetByName(AVAIL) || ss.insertSheet(AVAIL);
   if (a.getLastRow() === 0) {
@@ -52,9 +54,7 @@ function setup() {
 /* ---------- helpers ---------- */
 
 function sheet_(name) {
-  var id = PropertiesService.getScriptProperties().getProperty("SHEET_ID");
-  var ss = id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
-  return ss.getSheetByName(name);
+  return SpreadsheetApp.openById(SHEET_ID).getSheetByName(name);
 }
 
 function json_(obj) {
