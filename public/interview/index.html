@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Byte – Book your interview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --bg: #0a0a0a;
+    --fg: #eee;
+    --muted: #9a9a9a;
+    --faint: #6a6a6a;
+    --rule: #2e2e2e;
+    --rule-soft: #1c1c1c;
+    --focus: #fff;
+    --max: 640px;
+    --pad: 24px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+    background: var(--bg); color: var(--fg);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+a { color: var(--fg); text-decoration: underline; text-underline-offset: 2px; }
+a:hover { color: #fff; }
+.wrap { max-width: var(--max); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+.topbar { padding: 18px 0 14px; border-bottom: 1px solid var(--rule-soft); }
+.topbar .inner { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); }
+
+h1 { font-size: clamp(26px, 5vw, 34px); font-weight: 600; letter-spacing: -0.028em; line-height: 1.15; margin-bottom: 12px; }
+.lead { color: var(--muted); font-size: 15px; max-width: 56ch; margin-bottom: 40px; }
+
+.day { margin-bottom: 30px; }
+.day-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 10px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.slot {
+    background: transparent; color: var(--fg); font-family: inherit; font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 11px 0; cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+}
+.slot:hover { border-color: #5a5a5a; }
+.slot:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.slot[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+.panel { margin-top: 44px; padding-top: 32px; border-top: 1px solid var(--rule-soft); }
+.chosen { font-size: 17px; font-weight: 500; margin-bottom: 24px; }
+.chosen span { color: var(--muted); font-weight: 400; }
+
+.field { margin-bottom: 22px; }
+.field label { display: block; font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+input[type=text], input[type=email] {
+    width: 100%; background: transparent; color: var(--fg);
+    font-family: inherit; font-size: 16.5px; line-height: 1.55;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 12px 14px;
+}
+input:hover { border-color: #4a4a4a; }
+input:focus { border-color: var(--fg); outline: none; }
+::placeholder { color: #5a5a5a; }
+
+.btn {
+    display: inline-block; background: var(--fg); color: var(--bg);
+    font-family: inherit; font-size: 1rem; font-weight: 600;
+    border: 0; border-radius: 6px; padding: 14px 48px; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+.btn:hover { background: #e0e0e0; transform: translateY(-1px); }
+.btn:disabled { opacity: .6; cursor: default; transform: none; }
+
+.msg { font-size: 14px; margin-top: 16px; color: #ff8b8b; }
+.note { color: var(--muted); font-size: 14.5px; }
+.empty { color: var(--muted); font-size: 15px; padding: 24px 0; }
+
+.done { padding: 60px 0 40px; }
+.done p { color: var(--muted); margin-bottom: 12px; max-width: 56ch; }
+.done .when { color: var(--fg); font-size: 20px; font-weight: 500; margin: 8px 0 20px; }
+
+.hp { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; overflow: hidden; }
+.hide { display: none !important; }
+
+@media (max-width: 480px) {
+    :root { --pad: 20px; }
+    .grid { gap: 6px; }
+    .btn { width: 100%; }
+}
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="wrap"><div class="inner">
+        <span><a href="/" style="text-decoration:none">Byte</a></span>
+        <span>Interview</span>
+    </div></div>
+</div>
+
+<main class="wrap" style="padding-top:44px;padding-bottom:80px">
+
+    <section id="picker">
+        <h1>Book your interview</h1>
+        <p class="lead">Pick one 15-minute slot. It's a video call with two people from the Byte team. Times are shown in Finnish time.</p>
+
+        <div id="slots"><p class="empty">Loading available times…</p></div>
+
+        <form id="form" class="panel hide" novalidate autocomplete="on">
+            <div class="hp" aria-hidden="true">
+                <label>Do not fill this in <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+            <p class="chosen" id="chosen"></p>
+            <div class="field">
+                <label for="name">Full name</label>
+                <input type="text" id="name" name="name" autocomplete="name" required>
+            </div>
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+            </div>
+            <p class="note" style="margin-bottom:24px">Use the email you applied with. The calendar invite and video link go there.</p>
+            <button type="submit" class="btn" id="submit">Book this time</button>
+            <p class="msg hide" id="msg" role="alert"></p>
+        </form>
+    </section>
+
+    <section id="done" class="done hide">
+        <h1>You're booked.</h1>
+        <p class="when" id="doneWhen"></p>
+        <p>We've sent a calendar invite with a Google Meet link to your email. If you can't find it, check your spam folder.</p>
+        <p>Need to change the time? Email <a href="mailto:guidebyte@gmail.com">guidebyte@gmail.com</a>.</p>
+    </section>
+
+</main>
+
+<script src="/assets/config.js"></script>
+<script src="/assets/interview.js"></script>
+</body>
+</html>
