@@ -18,7 +18,7 @@ var CONFIG = {
   TITLE: "Byte 3 interview",
   CALENDAR_ID: "primary",
   ADD_MEET: true,
-  ONE_BOOKING_PER_EMAIL: true
+  REBOOK_REPLACES_PREVIOUS: true   // booking again with the same email cancels the earlier booking
 };
 
 // "Byte 3 interviews" sheet in robihanss@gmail.com's Drive
@@ -110,8 +110,13 @@ function allSlots_() {
 function activeBookings_() {
   var sh = sheet_(BOOK);
   if (!sh || sh.getLastRow() < 2) return [];
+  // Each returned row gets its sheet row number appended as r[8].
   return sh.getRange(2, 1, sh.getLastRow() - 1, BOOK_COLS.length).getValues()
-    .filter(function (r) { return String(r[7]).toLowerCase() !== "cancelled"; });
+    .map(function (r, i) { r.push(i + 2); return r; })
+    .filter(function (r) {
+      var st = String(r[7]).toLowerCase();
+      return st !== "cancelled" && st !== "rescheduled";
+    });
 }
 
 function freeSlots_() {
@@ -156,11 +161,12 @@ function doPost(e) {
 
     lock.waitLock(25000);
 
-    if (CONFIG.ONE_BOOKING_PER_EMAIL) {
-      var existing = activeBookings_().filter(function (r) { return String(r[4]).toLowerCase() === email; })[0];
-      if (existing) {
-        return json_({ ok: false, code: "already", error: "You already have an interview booked: " + existing[2] + ". Email guidebyte@gmail.com if you need to change it." });
-      }
+    var previous = activeBookings_().filter(function (r) { return String(r[4]).toLowerCase() === email; });
+
+    // Picking the time you already hold: nothing to change.
+    var same = previous.filter(function (r) { return new Date(String(r[1])).getTime() === slot; })[0];
+    if (same) {
+      return json_({ ok: true, start: new Date(slot).toISOString(), label: same[2], meet: same[6] || "", unchanged: true });
     }
 
     if (freeSlots_().indexOf(slot) === -1) {
@@ -173,7 +179,7 @@ function doPost(e) {
 
     var ev = {
       summary: CONFIG.TITLE + " – " + name,
-      description: "Byte 3 interview (" + CONFIG.SLOT_MINUTES + " min).\n\nCandidate: " + name + " <" + email + ">\n\nNeed to reschedule? Email guidebyte@gmail.com.",
+      description: "Byte 3 interview (" + CONFIG.SLOT_MINUTES + " min).\n\nCandidate: " + name + " <" + email + ">\n\nNeed to reschedule? Book a new time at https://joinbyte.so/interview with the same email – this booking is then cancelled automatically.",
       start: { dateTime: start.toISOString(), timeZone: CONFIG.TZ },
       end: { dateTime: end.toISOString(), timeZone: CONFIG.TZ },
       attendees: guests.map(function (g) { return { email: g }; }),
@@ -191,9 +197,21 @@ function doPost(e) {
       new Date().toISOString(), start.toISOString(), lbl, name, email,
       created.id || "", created.hangoutLink || "", "booked"
     ]);
+
+    // Rescheduling: cancel the person's earlier booking(s) and free those slots.
+    var replaced = [];
+    if (CONFIG.REBOOK_REPLACES_PREVIOUS) {
+      previous.forEach(function (r) {
+        try {
+          if (r[5]) Calendar.Events.remove(CONFIG.CALENDAR_ID, String(r[5]), { sendUpdates: "all" });
+        } catch (x) { /* event may already be gone */ }
+        sheet_(BOOK).getRange(r[8], 8).setValue("rescheduled");
+        replaced.push(r[2]);
+      });
+    }
     SpreadsheetApp.flush();
 
-    return json_({ ok: true, start: start.toISOString(), label: lbl, meet: created.hangoutLink || "" });
+    return json_({ ok: true, start: start.toISOString(), label: lbl, meet: created.hangoutLink || "", replaced: replaced });
   } catch (err) {
     return json_({ ok: false, code: "error", error: String(err.message || err) });
   } finally {
