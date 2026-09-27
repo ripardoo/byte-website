@@ -136,6 +136,11 @@
         if (d.ok) {
           document.getElementById("picker").classList.add("hide");
           document.getElementById("doneWhen").textContent = label(d.start || selected) + " (Finnish time)";
+          if (d.replaced && d.replaced.length) {
+            var rp = document.getElementById("doneReplaced");
+            rp.textContent = "Your earlier booking (" + d.replaced.join(", ") + ") has been cancelled.";
+            rp.classList.remove("hide");
+          }
           document.getElementById("done").classList.remove("hide");
           window.scrollTo({ top: 0 });
           return;
