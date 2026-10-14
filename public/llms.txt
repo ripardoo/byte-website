@@ -1,10 +1,10 @@
 # Byte
 
-> Byte is a curated talent fellowship that brings eight outstanding young individuals from Finland to San Francisco for one week of focused conversations with world-class founders and operators building the future with technology.
+> Byte is a curated talent fellowship that brings a small group of outstanding young individuals from Finland to San Francisco for one week of focused conversations with world-class founders and operators building the future with technology.
 
-Byte selects eight highly driven, ambitious individuals under 25 who are Finnish citizens or permanent residents. Participants are chosen for their technical ability, drive, and ambition — not prior experience. The format is intentionally small so every meeting is personal and high-signal for both sides.
+Byte selects a small group of highly driven, ambitious individuals under 25 who are Finnish citizens or permanent residents. Participants are chosen for their technical ability, drive, and ambition — not prior experience. The format is intentionally small so every meeting is personal and high-signal for both sides.
 
-Byte 3 takes place in autumn 2026. Applications are open 7–21 September 2026. The week in San Francisco runs 26 October – 1 November 2026. All expenses covered.
+Byte 3 takes place in autumn 2026. Applications were open 7–21 September 2026 and are now closed; nine fellows were selected. The week in San Francisco runs 26 October – 1 November 2026. All expenses covered.
 
 Participation is free. Travel and accommodation are covered by the Technology Industries of Finland Centennial Foundation (Teknologiateollisuuden 100-vuotissäätiö).
 
@@ -13,4 +13,5 @@ Contact: guidebyte@gmail.com
 ## Pages
 
 - [Home](https://joinbyte.so/): Main landing page with program overview, application info, and FAQ
-- [Application form](https://joinbyte.so/form/): Byte 3 application form (deadline: 21 September 2026)
+- [The Byte 3 batch](https://joinbyte.so/batch/): Intros of the Byte 3 fellows
+- [Application form](https://joinbyte.so/apply/): Byte 3 application form (closed 21 September 2026)
