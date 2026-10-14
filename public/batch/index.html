@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte 3 – The batch</title>
+    <meta name="description" content="Meet the nine Byte 3 fellows: young technologists from Finland in San Francisco, 26 October – 1 November 2026.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/global.css?v=5">
+    <script>
+    (function() {
+        var t;
+        try { t = localStorage.getItem('byte_theme'); } catch(e) {}
+        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+    </script>
+    <style>
+        .batch-title { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 1rem; }
+        .people { padding: 2.5rem 0; }
+        .person { padding: 1.6rem 0; border-top: 1px solid var(--border); }
+        .person:last-child { border-bottom: 1px solid var(--border); }
+        .person-name { font-size: 17px; font-weight: 600; }
+        .person-meta { font-size: 13.5px; color: var(--muted); margin: 2px 0 10px; }
+        .person-meta a { color: var(--muted); }
+        .person-blurb { font-size: 15px; line-height: 1.7; }
+        .person ul { margin: 10px 0 0 1.1em; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
+        .person li { margin-bottom: 4px; }
+        .status { color: var(--muted); font-size: 15px; }
+        .section-label, .content p.section-label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.6rem; }
+    </style>
+</head>
+<body>
+
+<div class="site">
+
+    <header class="header">
+        <a href="/" class="header-logo">Byte</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">
+            <span class="theme-toggle-knob" id="toggle-knob"></span>
+        </button>
+    </header>
+
+    <div class="content">
+        <p>Byte is a talent fellowship that takes young, technically talented people from Finland to San Francisco for a week of conversations with founders, builders and investors.</p>
+    </div>
+
+    <section class="people" aria-live="polite">
+        <div id="people"><p class="status">Loading the batch…</p></div>
+    </section>
+
+    <footer class="footer">
+        <p>Questions to <a href="mailto:guidebyte@gmail.com">guidebyte@gmail.com</a>.</p>
+    </footer>
+
+</div>
+
+<script src="/assets/config.js"></script>
+<script>
+(function() {
+    var toggle = document.getElementById('theme-toggle');
+    var knob = document.getElementById('toggle-knob');
+    function isDark() { return document.documentElement.getAttribute('data-theme') !== 'light'; }
+    function updateKnob() { knob.textContent = isDark() ? '☽' : '☀'; }
+    updateKnob();
+    toggle.addEventListener('click', function() {
+        var nowLight = isDark();
+        if (nowLight) document.documentElement.setAttribute('data-theme', 'light');
+        else document.documentElement.removeAttribute('data-theme');
+        try { localStorage.setItem('byte_theme', nowLight ? 'light' : 'dark'); } catch(e) {}
+        updateKnob();
+    });
+})();
+
+(function() {
+    var box = document.getElementById('people');
+    var CFG = window.BYTE_CONFIG || {};
+
+    function el(tag, cls, text) {
+        var n = document.createElement(tag);
+        if (cls) n.className = cls;
+        if (text) n.textContent = text;
+        return n;
+    }
+
+    function safeUrl(u) {
+        u = String(u || '').trim();
+        return /^https?:\/\//i.test(u) ? u : '';
+    }
+
+    function render(people) {
+        box.innerHTML = '';
+        if (!people.length) {
+            box.appendChild(el('p', 'status', 'Intros are on their way. Check back soon.'));
+            return;
+        }
+        people.forEach(function(p) {
+            var card = el('article', 'person');
+            card.appendChild(el('h2', 'person-name', p.display_name));
+
+            var meta = el('p', 'person-meta');
+            var bits = [];
+            if (p.age) bits.push(document.createTextNode(String(p.age).replace(/\D/g, '') + 'yo'));
+            [['linkedin', 'LinkedIn'], ['github', 'GitHub'], ['website', 'Website']].forEach(function(l) {
+                var u = safeUrl(p[l[0]]);
+                if (!u) return;
+                var a = el('a', null, l[1]);
+                a.href = u; a.rel = 'noopener'; a.target = '_blank';
+                bits.push(a);
+            });
+            bits.forEach(function(b, i) {
+                if (i) meta.appendChild(document.createTextNode(' · '));
+                meta.appendChild(b);
+            });
+            if (bits.length) card.appendChild(meta);
+
+            card.appendChild(el('p', 'person-blurb', p.blurb));
+
+            var hs = [p.highlight_1, p.highlight_2, p.highlight_3].filter(function(h) { return h && String(h).trim(); });
+            if (hs.length) {
+                var ul = el('ul');
+                hs.forEach(function(h) { ul.appendChild(el('li', null, h)); });
+                card.appendChild(ul);
+            }
+            box.appendChild(card);
+        });
+    }
+
+    if (!CFG.ENDPOINT) { render([]); return; }
+
+    fetch(CFG.ENDPOINT + '?action=batch')
+        .then(function(r) { return r.json(); })
+        .then(function(d) { render(d && d.ok && d.people ? d.people : []); })
+        .catch(function() { render([]); });
+})();
+</script>
+
+</body>
+</html>
