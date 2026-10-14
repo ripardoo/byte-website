@@ -20,7 +20,7 @@
     var d = {};
     Array.prototype.forEach.call(form.elements, function (el) {
       if (!el.name || el.name === "website_hp") return;
-      d[el.name] = el.type === "checkbox" ? (el.checked ? "yes" : "") : el.value.trim();
+      d[el.name] = el.value.trim();
     });
     return d;
   }
@@ -43,7 +43,7 @@
     Object.keys(d).forEach(function (k) {
       var el = form.elements[k];
       if (!el) return;
-      if (el.type === "checkbox") el.checked = d[k] === "yes"; else el.value = d[k];
+      el.value = d[k];
     });
   }
 
@@ -52,11 +52,9 @@
   function validate(el) {
     var wrap = fieldOf(el);
     if (!wrap) return true;
-    var v = el.type === "checkbox" ? el.checked : (el.value || "").trim();
+    var v = (el.value || "").trim();
     var ok = true;
     if (el.required && !v) ok = false;
-    else if (v && el.type === "email") ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-    else if (v && el.type === "url") ok = /^https?:\/\/\S+\.\S+/.test(v);
     else if (v && el.minLength > 0) ok = v.length >= el.minLength;
     wrap.classList.toggle("invalid", !ok);
     return ok;
@@ -74,14 +72,6 @@
     }
     return ok;
   }
-
-  // Add https:// when someone types a bare domain into a link field.
-  form.querySelectorAll('input[type=url]').forEach(function (el) {
-    el.addEventListener("blur", function () {
-      var v = el.value.trim();
-      if (v && !/^https?:\/\//i.test(v) && /\./.test(v)) el.value = "https://" + v;
-    });
-  });
 
   var ta = document.getElementById("blurb");
   var counter = ta.parentNode.querySelector(".counter");

@@ -23,11 +23,7 @@
         .person { padding: 1.6rem 0; border-top: 1px solid var(--border); }
         .person:last-child { border-bottom: 1px solid var(--border); }
         .person-name { font-size: 17px; font-weight: 600; }
-        .person-meta { font-size: 13.5px; color: var(--muted); margin: 2px 0 10px; }
-        .person-meta a { color: var(--muted); }
         .person-blurb { font-size: 15px; line-height: 1.7; }
-        .person ul { margin: 10px 0 0 1.1em; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
-        .person li { margin-bottom: 4px; }
         .status { color: var(--muted); font-size: 15px; }
         .section-label, .content p.section-label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.6rem; }
     </style>
@@ -85,11 +81,6 @@
         return n;
     }
 
-    function safeUrl(u) {
-        u = String(u || '').trim();
-        return /^https?:\/\//i.test(u) ? u : '';
-    }
-
     function render(people) {
         box.innerHTML = '';
         if (!people.length) {
@@ -99,31 +90,7 @@
         people.forEach(function(p) {
             var card = el('article', 'person');
             card.appendChild(el('h2', 'person-name', p.display_name));
-
-            var meta = el('p', 'person-meta');
-            var bits = [];
-            if (p.age) bits.push(document.createTextNode(String(p.age).replace(/\D/g, '') + 'yo'));
-            [['linkedin', 'LinkedIn'], ['github', 'GitHub'], ['website', 'Website']].forEach(function(l) {
-                var u = safeUrl(p[l[0]]);
-                if (!u) return;
-                var a = el('a', null, l[1]);
-                a.href = u; a.rel = 'noopener'; a.target = '_blank';
-                bits.push(a);
-            });
-            bits.forEach(function(b, i) {
-                if (i) meta.appendChild(document.createTextNode(' · '));
-                meta.appendChild(b);
-            });
-            if (bits.length) card.appendChild(meta);
-
             card.appendChild(el('p', 'person-blurb', p.blurb));
-
-            var hs = [p.highlight_1, p.highlight_2, p.highlight_3].filter(function(h) { return h && String(h).trim(); });
-            if (hs.length) {
-                var ul = el('ul');
-                hs.forEach(function(h) { ul.appendChild(el('li', null, h)); });
-                card.appendChild(ul);
-            }
             box.appendChild(card);
         });
     }

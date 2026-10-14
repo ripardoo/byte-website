@@ -32,31 +32,16 @@ var COLUMNS = [
 ];
 
 // Blurb form (joinbyte.so/blurb). Goes to the "Blurbs" tab, created on first use.
-// The team publishes a blurb on joinbyte.so/batch by typing "yes" in its `publish` column.
 var BLURB_SHEET = "Blurbs";
 var BLURB_COLUMNS = [
   "submitted_at",
   "display_name",
-  "full_name",
-  "email",
-  "age",
   "blurb",
-  "highlight_1",
-  "highlight_2",
-  "highlight_3",
-  "linkedin",
-  "github",
-  "website",
-  "publish_consent",
   "user_agent",
   "publish",
   "order"
 ];
-// Only these fields are ever returned by the public batch feed (never email).
-var BLURB_PUBLIC = [
-  "display_name", "age", "blurb", "highlight_1", "highlight_2", "highlight_3",
-  "linkedin", "github", "website"
-];
+var BLURB_PUBLIC = ["display_name", "blurb"];
 
 function json_(obj) {
   return ContentService
@@ -115,7 +100,7 @@ function doGet(e) {
       // Keep the latest submission per person, then only rows the team marked publish = yes.
       var latest = {};
       values.forEach(function (r) {
-        var key = String(r[idx.email] || r[idx.full_name] || "").trim().toLowerCase();
+        var key = String(r[idx.display_name] || "").trim().toLowerCase();
         if (key) latest[key] = r;
       });
 
